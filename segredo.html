@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>🌸 REI CAVEIRA SAKURA - 10000 DE VIDA 🌸</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Sawarabi+Mincho&family=Zen+Maru+Gothic:wght@700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:radial-gradient(ellipse at top,#fff5f9 0%,#ffe0ec 30%,#ffc2d9 100%);min-height:100vh;display:flex;flex-direction:column;align-items:center;font-family:'Zen Maru Gothic',Arial}
+.titulo{margin:10px 0 2px;font-family:'Sawarabi Mincho';font-size:30px;letter-spacing:2px;background:linear-gradient(90deg,#c9184a,#ff5d8f,#ff8fab);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sub{font-size:12px;color:#a4133c;letter-spacing:1px;margin-bottom:6px;text-align:center}
+#gameWrap{position:relative;padding:12px;background:linear-gradient(135deg,rgba(255,255,255,0.95),rgba(255,228,235,0.95));border-radius:22px;border:2px solid white;box-shadow:0 20px 60px rgba(201,24,74,0.3),inset 0 1px 0 white}
+canvas{display:block;border-radius:16px;background:radial-gradient(ellipse at center,#fffafb 0%,#fff0f5 50%,#ffe4ec 100%)}
+#hud{position:absolute;top:18px;left:18px;right:18px;display:flex;justify-content:space-between;gap:8px;pointer-events:none}
+.hudCard{background:rgba(255,255,255,0.92);backdrop-filter:blur(12px);border:1px solid rgba(255,182,193,0.7);border-radius:14px;padding:7px 11px;box-shadow:0 6px 20px rgba(201,24,74,0.15);min-width:210px}
+.hudLabel{font-size:10px;letter-spacing:1px;color:#c9184a;display:flex;justify-content:space-between;margin-bottom:3px;font-weight:800}
+.bar{width:100%;height:14px;background:#fff;border-radius:20px;overflow:hidden;border:1px solid #ffb3c6;position:relative}
+.fill{height:100%;border-radius:20px;transition:width 0.08s}
+#bossBarFill{background:linear-gradient(90deg,#ff0a54,#ff5d8f,#ff8fab);box-shadow:0 0 12px #ff5d8f}
+#playerBarFill{background:linear-gradient(90deg,#38b000,#70e000)}
+#centerHud{position:absolute;top:18px;left:50%;transform:translateX(-50%);text-align:center;pointer-events:none}
+#spell{ background:rgba(255,255,255,0.95);border:1px solid #ffb3c6;border-radius:30px;padding:5px 16px;font-size:11px;color:#c9184a;box-shadow:0 4px 15px rgba(255,93,143,0.25);font-weight:700}
+#investidaBadge{margin-top:6px;background:white;border-radius:20px;padding:5px 16px;font-size:13px;font-weight:900;color:#ff0a54;border:1px solid #ffb3c6;box-shadow:0 0 20px rgba(255,10,84,0.25)}
+#controls{display:flex;gap:6px;margin-top:9px;flex-wrap:wrap;justify-content:center}
+.kbd{background:linear-gradient(180deg,#fff,#ffe4ec);border:1px solid #ffb3c6;border-bottom-width:3px;border-radius:8px;padding:5px 11px;font-size:11px;font-weight:800;color:#a4133c}
+</style>
+</head>
+<body>
+<div class="titulo">🌸 REI CAVEIRA SAKURA 🌸</div>
+<div class="sub">MODO TOUHOU ROSA E BRANCO — 10000 DE VIDA — TIROS SUPER VISÍVEIS — HITBOX NA BOLINHA</div>
+<div id="gameWrap">
+ <canvas id="game" width="860" height="620"></canvas>
+ <div id="hud">
+   <div class="hudCard"><div class="hudLabel"><span>👹 CHEFÃO REI CAVEIRA</span><span id="bossHpTxt">10000 / 10000</span></div><div class="bar"><div id="bossBarFill" class="fill" style="width:100%"></div></div></div>
+   <div class="hudCard" style="min-width:120px"><div class="hudLabel"><span>🧙‍♀️ VOCÊ</span><span id="playerHpTxt">100%</span></div><div class="bar"><div id="playerBarFill" class="fill" style="width:100%"></div></div></div>
+ </div>
+ <div id="centerHud"><div id="spell">🌸 Carta Mágica — Inferno de 10000 Pétalas 🌸</div><div id="investidaBadge">INVESTIDA EM: 2.5s</div></div>
+</div>
+<div id="controls">
+ <div class="kbd">WASD = MOVER</div>
+ <div class="kbd">B N M V = ATIRAR (SEGURA)</div>
+ <div class="kbd">SHIFT = FOCO LENTO + MOSTRA HITBOX</div>
+ <div class="kbd">R = REINICIAR FASE</div>
+ <div class="kbd">ROÇOU: <span id="graze">0</span></div>
+</div>
+
+<script>
+const canvas=document.getElementById('game'), ctx=canvas.getContext('2d');
+let keys={}, jogando=true, graze=0, frame=0;
+let player,boss,tiros,tirosBoss,particulas,rastros,petalas;
+const TEMPO_INVESTIDA=150;
+
+function iniciarJogo(){
+ player={x:430,y:520,w:26,h:26,vida:100,vidaMax:100,vel:6.5,velFoco:2.6,hitbox:3.2};
+ boss={x:375,y:70,w:110,h:90,vida:10000,vidaMax:10000,dir:5.8,vx:0,vy:0,atkTimer:0,fase:1,investidaTimer:0,investindo:false,alvoX:0,alvoY:0};
+ tiros=[]; tirosBoss=[]; particulas=[]; rastros=[]; petalas=[]; graze=0; jogando=true;
+ for(let i=0;i<35;i++) petalas.push({x:Math.random()*860,y:Math.random()*620,vx:(Math.random()-0.5)*0.5,vy:0.3+Math.random()*0.7,rot:Math.random()*6.28,vr:(Math.random()-0.5)*0.03,scale:0.6+Math.random()*0.7});
+}
+iniciarJogo();
+
+addEventListener('keydown',e=>{ let k=e.key.toLowerCase(); keys[k]=true; keys[e.code.toLowerCase()]=true; if(k=='r') iniciarJogo(); });
+addEventListener('keyup',e=>{ keys[e.key.toLowerCase()]=false; keys[e.code.toLowerCase()]=false; });
+
+function atirar(){ if(!jogando) return; tiros.push({x:player.x+13+(Math.random()-0.5)*8,y:player.y+13,vx:(Math.random()-0.5)*0.6,vy:-5,vel:15,forca:0.4}); }
+
+function bossAtacar(){
+ boss.atkTimer++;
+ let intervalo = boss.fase==1?12:boss.fase==2?6:2;
+ if(boss.atkTimer>intervalo){
+   boss.atkTimer=0;
+   let angBase=Math.atan2((player.y+13)-(boss.y+45),(player.x+13)-(boss.x+55));
+   if(boss.fase==1){
+     // FASE 1: 7000 a 10000 vida - Anel simples
+     for(let i=0;i<12;i++){ let ang=(Math.PI*2/12)*i + frame*0.04; tirosBoss.push({x:boss.x+55,y:boss.y+45,vx:Math.cos(ang)*3.5,vy:Math.sin(ang)*3.5,cor:'#ff5d8f',borda:'white',tipo:'grande',dano:20}); }
+   } else if(boss.fase==2){
+     // FASE 2: 2500 a 7000 vida - Triplo anel
+     for(let w=0;w<3;w++){
+       for(let i=0;i<16;i++){ let ang=(Math.PI*2/16)*i + w*0.12 + frame*0.02; tirosBoss.push({x:boss.x+55,y:boss.y+45,vx:Math.cos(ang)*(2.4+w*0.7),vy:Math.sin(ang)*(2.4+w*0.7),cor:w==0?'#ff0a54':w==1?'#ff8fab':'#ffbe0b',borda:'white',tipo:'grande',dano:20}); }
+     }
+     for(let i=-2;i<=2;i++){ let ang=angBase+i*0.18; tirosBoss.push({x:boss.x+55,y:boss.y+90,vx:Math.cos(ang)*8,vy:Math.sin(ang)*8,cor:'preto',borda:'#ff0a54',tipo:'mira',dano:20}); }
+   } else {
+     // FASE 3: 0 a 2500 vida - INFERNO TOTAL
+     for(let i=0;i<32;i++){ let ang=(Math.PI*2/32)*i + frame*0.03; tirosBoss.push({x:boss.x+55,y:boss.y+45,vx:Math.cos(ang)*4.5,vy:Math.sin(ang)*4.5,cor:'#ff5d8f',borda:'white',tipo:'grande',dano:20}); }
+     for(let i=0;i<24;i++){ let ang=(Math.PI*2/24)*i - frame*0.035; tirosBoss.push({x:boss.x+55,y:boss.y+45,vx:Math.cos(ang)*3,vy:Math.sin(ang)*3,cor:'#fb5607',borda:'white',tipo:'medio',dano:20}); }
+     if(frame%2==0) for(let i=-3;i<=3;i++){ let ang=angBase+i*0.15; tirosBoss.push({x:boss.x+55,y:boss.y+90,vx:Math.cos(ang)*9,vy:Math.sin(ang)*9,cor:'preto',borda:'#ffbe0b',tipo:'mira',dano:20}); }
+   }
+ }
+}
+function explosao(x,y,cor,q=14){ for(let i=0;i<q;i++) particulas.push({x,y,vx:(Math.random()-0.5)*11,vy:(Math.random()-0.5)*11,vida:22,cor}); }
+
+function update(){
+ if(!jogando) return;
+ let foco=keys['shift']; let v=foco?player.velFoco:player.vel;
+ if(keys['a']) player.x-=v; if(keys['d']) player.x+=v; if(keys['w']) player.y-=v; if(keys['s']) player.y+=v;
+ player.x=Math.max(8,Math.min(826,player.x)); player.y=Math.max(8,Math.min(586,player.y));
+
+ if(keys['b']||keys['n']||keys['m']||keys['v']){
+   let qtd=(keys['b']?1:0)+(keys['n']?1:0)+(keys['m']?1:0)+(keys['v']?1:0);
+   for(let k=0;k<qtd;k++) atirar();
+ }
+
+ if(!boss.investindo){
+   boss.investidaTimer++; boss.x+=boss.dir; if(boss.x<=0||boss.x>=750) boss.dir*=-1;
+   if(boss.investidaTimer> TEMPO_INVESTIDA-35){ boss.alvoX=player.x+13; boss.alvoY=player.y+13; }
+   if(boss.investidaTimer>=TEMPO_INVESTIDA){
+     boss.investindo=true; boss.investidaTimer=0;
+     let ang=Math.atan2(boss.alvoY-(boss.y+45),boss.alvoX-(boss.x+55));
+     boss.vx=Math.cos(ang)*18; boss.vy=Math.sin(ang)*18;
+     setTimeout(()=>{boss.investindo=false; boss.vx=0; boss.vy=0;},650);
+   }
+ } else { boss.x+=boss.vx; boss.y+=boss.vy; boss.x=Math.max(0,Math.min(750,boss.x)); boss.y=Math.max(0,Math.min(460,boss.y)); }
+
+ // FASES EM PORTUGUES COM 10000 VIDA
+ if(boss.vida<6500 && boss.fase==1){ boss.fase=2; document.getElementById('spell').textContent='🌸 Carta Mágica — Diamante Rosa Triplo 🌸'; }
+ if(boss.vida<2500 && boss.fase==2){ boss.fase=3; document.getElementById('spell').textContent='💀 CARTA FINAL — Inferno de 10000 Pétalas 💀'; }
+
+ bossAtacar();
+ let px=player.x+13, py=player.y+13;
+
+ tiros.forEach((t,i)=>{
+   let angAlvo=Math.atan2((boss.y+45)-t.y,(boss.x+55)-t.x);
+   let angAtual=Math.atan2(t.vy,t.vx); let diff=angAlvo-angAtual;
+   if(diff>Math.PI) diff-=Math.PI*2; if(diff<-Math.PI) diff+=Math.PI*2;
+   t.vx=Math.cos(angAtual+diff*t.forca)*t.vel; t.vy=Math.sin(angAtual+diff*t.forca)*t.vel;
+   rastros.push({x:t.x,y:t.y,vida:14}); t.x+=t.vx; t.y+=t.vy;
+   if(t.x>boss.x && t.x<boss.x+boss.w && t.y>boss.y && t.y<boss.y+boss.h){
+     tiros.splice(i,1); boss.vida-=12; explosao(t.x,t.y,'#ff8fab',10);
+     if(boss.vida<=0){boss.vida=0;jogando=false; explosao(boss.x+55,boss.y+45,'#fff',200);}
+   }
+ });
+
+ tirosBoss.forEach((t,i)=>{
+   t.x+=t.vx; t.y+=t.vy;
+   if(t.x<-70||t.x>930||t.y<-70||t.y>690) tirosBoss.splice(i,1);
+   else {
+     let dist=Math.hypot(t.x-px,t.y-py);
+     let hit = t.tipo=='grande'?13 : t.tipo=='medio'?10 : 9;
+     if(dist < player.hitbox + hit){
+       tirosBoss.splice(i,1); player.vida-=20; explosao(t.x,t.y,'#ff0a54',16);
+       if(player.vida<=0){player.vida=0;jogando=false;}
+     } else if(dist < 32){ if(!t.grazed){t.grazed=true; graze++;} }
+   }
+ });
+
+ if(boss.investindo && Math.hypot(px-(boss.x+55),py-(boss.y+45)) < 65 + player.hitbox){ player.vida=0; jogando=false; explosao(px,py,'#ff0a54',50); }
+
+ petalas.forEach(p=>{p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr; if(p.y>640){p.y=-10; p.x=Math.random()*860}});
+ rastros.forEach((r,i)=>{r.vida--; if(r.vida<=0) rastros.splice(i,1);});
+ particulas.forEach((p,i)=>{p.x+=p.vx; p.y+=p.vy; p.vida--; if(p.vida<=0) particulas.splice(i,1);});
+
+ let tempoRestante=(TEMPO_INVESTIDA-boss.investidaTimer)/60;
+ let badge=document.getElementById('investidaBadge');
+ if(!boss.investindo){ badge.textContent=`INVESTIDA EM: ${tempoRestante.toFixed(1)}s`; badge.style.background=tempoRestante<1?'#ff0a54':tempoRestante<1.5?'#ff8fab':'white'; badge.style.color=tempoRestante<1.2?'white':'#c9184a'; }
+ else {badge.textContent='⚠ INVESTINDO AGORA! CORRE! ⚠'; badge.style.background='#ff0a54'; badge.style.color='white';}
+
+ document.getElementById('bossBarFill').style.width=(boss.vida/boss.vidaMax*100)+'%';
+ document.getElementById('bossHpTxt').innerText=`${Math.max(0,Math.floor(boss.vida))} / ${boss.vidaMax}`;
+ document.getElementById('playerBarFill').style.width=(player.vida/player.vidaMax*100)+'%';
+ document.getElementById('playerHpTxt').innerText=Math.floor(player.vida)+'%';
+ document.getElementById('graze').innerText=graze;
+}
+
+function draw(){
+ ctx.fillStyle='#fffafb'; ctx.fillRect(0,0,860,620);
+ ctx.fillStyle='rgba(255,182,193,0.10)'; for(let y=0;y<620;y+=20) ctx.fillRect(0,y,860,1);
+
+ petalas.forEach(p=>{ ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot); ctx.globalAlpha=0.3*p.scale; ctx.font=(11*p.scale)+'px Arial'; ctx.fillText('🌸',-6,-4); ctx.restore(); });
+
+ if(!boss.investindo){
+   let prog=boss.investidaTimer/TEMPO_INVESTIDA;
+   if(prog>0.3){
+     let a=(prog-0.3)/0.7;
+     ctx.strokeStyle=`rgba(255,10,84,${a*0.8})`; ctx.lineWidth=3+a*14; ctx.setLineDash([16,10]);
+     ctx.beginPath(); ctx.moveTo(boss.x+55,boss.y+45); ctx.lineTo(boss.alvoX||player.x+13,boss.alvoY||player.y+13); ctx.stroke(); ctx.setLineDash([]);
+     if(prog>0.65){ ctx.fillStyle=`rgba(255,93,143,${0.18})`; ctx.beginPath(); ctx.arc(boss.x+55,boss.y+45,80+prog*30,0,Math.PI*2); ctx.fill(); }
+   }
+ } else { ctx.fillStyle='rgba(255,10,84,0.14)'; ctx.fillRect(0,0,860,620); }
+
+ rastros.forEach(r=>{ ctx.globalAlpha=r.vida/14; ctx.fillStyle='#ff8fab'; ctx.shadowColor='#ff5d8f'; ctx.shadowBlur=12; ctx.beginPath(); ctx.arc(r.x,r.y,4,0,Math.PI*2); ctx.fill(); ctx.shadowBlur=0; ctx.globalAlpha=1; });
+
+ if(boss.vida>0){
+   let aura=ctx.createRadialGradient(boss.x+55,boss.y+45,10,boss.x+55,boss.y+45,110);
+   aura.addColorStop(0,'rgba(255,93,143,0.4)'); aura.addColorStop(1,'rgba(255,93,143,0)');
+   ctx.fillStyle=aura; ctx.beginPath(); ctx.arc(boss.x+55,boss.y+45,110,0,Math.PI*2); ctx.fill();
+   ctx.font=(boss.fase==3?'96px':'78px')+' Arial'; ctx.shadowColor='#ff5d8f'; ctx.shadowBlur=boss.investindo?40:22; ctx.fillText(boss.fase==3?'👹':'💀',boss.x,boss.y+84); ctx.shadowBlur=0;
+ }
+
+ let px=player.x+13, py=player.y+13;
+ ctx.fillStyle='rgba(112,224,0,0.18)'; ctx.beginPath(); ctx.arc(px,py+12,20,0,Math.PI*2); ctx.fill();
+ ctx.font='27px Arial'; ctx.fillText('🧙‍♀️',player.x-2,player.y+22);
+
+ // HITBOX BOLINHA TOUHOU - IGUALZINHO
+ let foco=keys['shift'];
+ ctx.save();
+ if(foco){
+   ctx.strokeStyle='rgba(255,255,255,0.95)'; ctx.lineWidth=1.4; ctx.setLineDash([5,5]);
+   ctx.beginPath(); ctx.arc(px,py,player.hitbox+14,0,Math.PI*2); ctx.stroke(); ctx.setLineDash([]);
+   ctx.strokeStyle='rgba(255,93,143,0.7)'; ctx.beginPath(); ctx.arc(px,py,player.hitbox+8,0,Math.PI*2); ctx.stroke();
+ }
+ let hg=ctx.createRadialGradient(px,py,0,px,py,player.hitbox+2);
+ hg.addColorStop(0,'#ffffff'); hg.addColorStop(0.4,'#ff8fab'); hg.addColorStop(1,'#ff0a54');
+ ctx.fillStyle=hg; ctx.shadowColor='#ff5d8f'; ctx.shadowBlur=foco?20:12; ctx.beginPath(); ctx.arc(px,py,player.hitbox,0,Math.PI*2); ctx.fill(); ctx.shadowBlur=0;
+ ctx.fillStyle='white'; ctx.beginPath(); ctx.arc(px,py,1.3,0,Math.PI*2); ctx.fill(); ctx.restore();
+
+ // SEU TIRO - ROSA BRILHANTE APARENTE
+ tiros.forEach(t=>{
+   ctx.shadowColor='#ff5d8f'; ctx.shadowBlur=18;
+   ctx.fillStyle='white'; ctx.beginPath(); ctx.arc(t.x,t.y,9,0,Math.PI*2); ctx.fill();
+   ctx.fillStyle='#ff0a54'; ctx.beginPath(); ctx.arc(t.x,t.y,6,0,Math.PI*2); ctx.fill();
+   ctx.fillStyle='white'; ctx.beginPath(); ctx.arc(t.x-1.5,t.y-1.5,2,0,Math.PI*2); ctx.fill();
+   ctx.shadowBlur=0;
+ });
+
+ // TIRO DO CHEFÃO - ULTRA APARENTE COM 3 CAMADAS
+ tirosBoss.forEach(t=>{
+   let size = t.tipo=='grande'?15 : t.tipo=='medio'?11 : 10;
+   // 1. Aura externa gigante transparente
+   ctx.fillStyle = t.cor=='preto'? 'rgba(0,0,0,0.22)' : t.cor+'55';
+   ctx.beginPath(); ctx.arc(t.x,t.y,size+10,0,Math.PI*2); ctx.fill();
+   // 2. Borda branca grossa
+   ctx.fillStyle = t.borda; ctx.beginPath(); ctx.arc(t.x,t.y,size+4,0,Math.PI*2); ctx.fill();
+   // 3. Corpo colorido com brilho
+   ctx.fillStyle = t.cor=='preto'? '#1a1a1a' : t.cor;
+   ctx.shadowColor = t.cor=='preto'? '#ffbe0b' : t.cor; ctx.shadowBlur=18;
+   ctx.beginPath(); ctx.arc(t.x,t.y,size,0,Math.PI*2); ctx.fill();
+   // 4. Brilho interno branco
+   ctx.fillStyle='rgba(255,255,255,0.85)'; ctx.beginPath(); ctx.arc(t.x-2.5,t.y-2.5,size*0.38,0,Math.PI*2); ctx.fill();
+   ctx.shadowBlur=0;
+   // 5. Contorno preto fino pra ficar mais visível ainda
+   ctx.strokeStyle='rgba(0,0,0,0.25)'; ctx.lineWidth=1; ctx.beginPath(); ctx.arc(t.x,t.y,size,0,Math.PI*2); ctx.stroke();
+ });
+
+ particulas.forEach(p=>{ ctx.globalAlpha=p.vida/22; ctx.fillStyle=p.cor; ctx.beginPath(); ctx.arc(p.x,p.y,4.5,0,Math.PI*2); ctx.fill(); ctx.globalAlpha=1; });
+
+ if(!jogando){
+   ctx.fillStyle=boss.vida<=0?'rgba(255,255,255,0.92)':'rgba(255,228,235,0.96)'; ctx.fillRect(0,0,860,620);
+   ctx.fillStyle=boss.vida<=0?'#c9184a':'#ff0a54'; ctx.font='bold 44px "Sawarabi Mincho"'; ctx.textAlign='center';
+   if(boss.vida<=0){
+     ctx.fillText('🎉 VITÓRIA PERFEITA! 🎉',430,280);
+     ctx.font='bold 22px "Zen Maru Gothic"'; ctx.fillText(`Você destruiu o Rei Caveira de 10000 de vida!`,430,315);
+     ctx.font='16px "Zen Maru Gothic"'; ctx.fillText(`Roçou ${graze} vezes nos tiros — Você é um mestre Touhou!`,430,340);
+   } else {
+     ctx.fillText('💀 VOCÊ FOI DERROTADO 💀',430,280);
+     ctx.font='18px "Zen Maru Gothic"'; ctx.fillText(`Vida do chefão restante: ${Math.floor(boss.vida)}`,430,315);
+     ctx.font='15px "Zen Maru Gothic"'; ctx.fillText(`Dica: Segure SHIFT pra ficar lento e desviar só com a bolinha!`,430,340);
+   }
+   ctx.font='bold 18px "Zen Maru Gothic"'; ctx.fillText('APERTE R PARA REINICIAR',430,375);
+   ctx.textAlign='left';
+ }
+}
+function loop(){ frame++; update(); draw(); requestAnimationFrame(loop); }
+loop();
+</script>
+</body>
+</html>
