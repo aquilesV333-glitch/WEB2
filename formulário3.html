@@ -1,0 +1,281 @@
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Jr. - Avaliação</title>
+</head>
+
+<body>
+
+    <header>
+
+        <h1>WhatsApp Jr.</h1>
+
+        <nav>
+            <a href="index.html">Início</a>
+            <a href="servicos.html">Serviços</a>
+            <a href="produtos.html">Produtos</a>
+            <a href="portfolio.html">Portfólio</a>
+            <a href="contato.html">Contato</a>
+        </nav>
+
+    </header>
+
+    <main>
+
+        <h2>Avalie o WhatsApp Jr.</h2>
+
+        <p>
+            Sua opinião é muito importante para nós!
+            Conte o que você achou do WhatsApp Jr.
+            e diga o que podemos melhorar.
+        </p>
+
+        <form action="#" method="post">
+
+            <fieldset>
+
+                <legend>Seus dados</legend>
+
+                <label for="nome">Nome:</label>
+                <br>
+
+                <input
+                    type="text"
+                    id="nome"
+                    name="nome"
+                    placeholder="Digite seu nome"
+                    required
+                >
+
+                <br><br>
+
+                <label for="email">E-mail:</label>
+                <br>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Digite seu e-mail"
+                    required
+                >
+
+            </fieldset>
+
+            <br>
+
+            <fieldset>
+
+                <legend>Avaliação</legend>
+
+                <p>
+                    De 1 a 5, qual nota você dá para o WhatsApp Jr.?
+                </p>
+
+                <input type="radio" id="nota1" name="nota" value="1" required>
+                <label for="nota1">1 - Muito ruim</label>
+
+                <br>
+
+                <input type="radio" id="nota2" name="nota" value="2">
+                <label for="nota2">2 - Ruim</label>
+
+                <br>
+
+                <input type="radio" id="nota3" name="nota" value="3">
+                <label for="nota3">3 - Regular</label>
+
+                <br>
+
+                <input type="radio" id="nota4" name="nota" value="4">
+                <label for="nota4">4 - Bom</label>
+
+                <br>
+
+                <input type="radio" id="nota5" name="nota" value="5">
+                <label for="nota5">5 - Excelente</label>
+
+            </fieldset>
+
+            <br>
+
+            <fieldset>
+
+                <legend>Sua experiência</legend>
+
+                <label for="experiencia">
+                    Como foi sua experiência com o WhatsApp Jr.?
+                </label>
+
+                <br><br>
+
+                <select id="experiencia" name="experiencia" required>
+
+                    <option value="">
+                        Selecione uma opção
+                    </option>
+
+                    <option value="excelente">
+                        Excelente
+                    </option>
+
+                    <option value="boa">
+                        Boa
+                    </option>
+
+                    <option value="regular">
+                        Regular
+                    </option>
+
+                    <option value="ruim">
+                        Ruim
+                    </option>
+
+                    <option value="muito-ruim">
+                        Muito ruim
+                    </option>
+
+                </select>
+
+            </fieldset>
+
+            <br>
+
+            <fieldset>
+
+                <legend>Pontos positivos</legend>
+
+                <label for="pontos">
+                    O que você mais gostou no WhatsApp Jr.?
+                </label>
+
+                <br><br>
+
+                <textarea
+                    id="pontos"
+                    name="pontos"
+                    rows="6"
+                    cols="50"
+                    placeholder="Conte o que você mais gostou..."
+                ></textarea>
+
+            </fieldset>
+
+            <br>
+
+            <fieldset>
+
+                <legend>Sugestões de melhoria</legend>
+
+                <label for="melhorias">
+                    O que nós poderíamos melhorar?
+                </label>
+
+                <br><br>
+
+                <textarea
+                    id="melhorias"
+                    name="melhorias"
+                    rows="8"
+                    cols="50"
+                    placeholder="Digite suas sugestões..."
+                    required
+                ></textarea>
+
+            </fieldset>
+
+            <br>
+
+            <fieldset>
+
+                <legend>Recomendação</legend>
+
+                <p>
+                    Você recomendaria o WhatsApp Jr. para outras pessoas?
+                </p>
+
+                <input
+                    type="radio"
+                    id="sim"
+                    name="recomendaria"
+                    value="sim"
+                    required
+                >
+
+                <label for="sim">Sim</label>
+
+                <br>
+
+                <input
+                    type="radio"
+                    id="talvez"
+                    name="recomendaria"
+                    value="talvez"
+                >
+
+                <label for="talvez">Talvez</label>
+
+                <br>
+
+                <input
+                    type="radio"
+                    id="nao"
+                    name="recomendaria"
+                    value="nao"
+                >
+
+                <label for="nao">Não</label>
+
+            </fieldset>
+
+            <br>
+
+            <fieldset>
+
+                <legend>Confirmação</legend>
+
+                <input
+                    type="checkbox"
+                    id="confirmacao"
+                    name="confirmacao"
+                    required
+                >
+
+                <label for="confirmacao">
+                    Confirmo que minha avaliação foi preenchida corretamente.
+                </label>
+
+            </fieldset>
+
+            <br>
+
+            <button type="submit">
+                Enviar avaliação
+            </button>
+
+            <button type="reset">
+                Limpar formulário
+            </button>
+
+        </form>
+
+    </main>
+
+    <footer>
+
+        <hr>
+
+        <p>
+            &copy; 2026 WhatsApp Jr. Todos os direitos reservados.
+        </p>
+
+    </footer>
+
+</body>
+
+</html>
+```
