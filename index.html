@@ -1,256 +1,57 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>WhatsApp Junior - Início</title>
-
-    <style>
-
-        /* PÁGINA */
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #f0f2f5;
-            color: #222;
-            font-family: Arial, sans-serif;
-            text-align: center;
-        }
-
-
-        /* CABEÇALHO */
-        header {
-            background-color: #075e54;
-            color: white;
-            padding: 25px 10px;
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 42px;
-        }
-
-        header h2 {
-            margin: 8px 0 20px;
-            font-size: 20px;
-            font-weight: normal;
-        }
-
-        header img {
-            display: block;
-            margin: 0 auto;
-            max-width: 90%;
-            height: auto;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,.25);
-        }
-
-
-        /* MENU */
-        nav {
-            background-color: #128c7e;
-            padding: 12px 5px;
-        }
-
-        nav hr {
-            display: none;
-        }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-            margin: 0 8px;
-            padding: 8px 10px;
-            border-radius: 8px;
-            display: inline-block;
-        }
-
-        nav a:hover {
-            background-color: #075e54;
-        }
-
-
-        /* CONTEÚDO */
-        main {
-            max-width: 900px;
-            margin: 30px auto;
-            padding: 0 15px;
-        }
-
-        section {
-            background-color: white;
-            margin: 0 auto 25px;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,.12);
-            text-align: center;
-        }
-
-        section h3 {
-            color: #075e54;
-            font-size: 25px;
-            margin-top: 0;
-        }
-
-        section p {
-            font-size: 17px;
-            line-height: 1.6;
-            text-align: center;
-        }
-
-
-        /* GALERIA */
-        table {
-            width: 100%;
-            max-width: 850px;
-            margin: 0 auto;
-            border-collapse: separate;
-            border-spacing: 10px;
-            border: 0;
-        }
-
-        td {
-            background-color: #f7f7f7;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 15px;
-            vertical-align: middle;
-            text-align: center;
-        }
-
-        td img {
-            display: block;
-            margin: 0 auto;
-            max-width: 100%;
-            height: auto;
-            border-radius: 10px;
-        }
-
-
-        /* LINKS */
-        section a {
-            color: #075e54;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        section a:hover {
-            text-decoration: underline;
-        }
-
-
-        /* BOTÃO AJUDAR */
-        section h2 a {
-            background-color: #25d366;
-            color: white;
-            padding: 12px 20px;
-            border-radius: 10px;
-            display: inline-block;
-        }
-
-
-        /* RODAPÉ */
-        footer {
-            background-color: #075e54;
-            color: white;
-            padding: 15px;
-            text-align: center;
-        }
-
-        footer hr {
-            display: none;
-        }
-
-
-        @media (max-width: 700px) {
-
-            nav a {
-                margin: 3px;
-            }
-
-            table,
-            tbody,
-            tr,
-            td {
-                display: block;
-                width: auto;
-            }
-
-            td {
-                margin-bottom: 10px;
-            }
-
-            td img {
-                max-width: 250px;
-            }
-
-        }
-
-    </style>
-
+    <link rel="stylesheet" href="config.css">
 </head>
-
-
 <body>
-
-
     <header>
-
-        <h1 style="letter-spacing: 1px;">
-            WhatsApp Junior
-        </h1>
-
-        <h2>
-            O filho do WhatsApp que veio pra ficar
-        </h2>
-
-        <img
-            src="https://images.unsplash.com/photo-1611746872915-64382b5c76da?q=80&w=1000"
-            alt="Banner WhatsApp Junior"
-            width="800"
-            height="300"
-        >
-
+        <h1>WhatsApp Junior</h1>
+        <h2>O filho do WhatsApp que veio pra ficar</h2>
+        <img src="https://images.unsplash.com/photo-1611746872915-64382b5c76da?q=80&w=1000" alt="Banner WhatsApp Junior">
     </header>
 
-
     <nav>
-
-        <hr>
-
-        <a href="index.html">Início</a> |
-        <a href="sobre.html">Sobre</a> |
-        <a href="produtos.html">Produtos</a> |
-        <a href="parceiros.html">Parceiros</a> |
-        <a href="portfolio.html">portfolio</a> |
+        <a href="index.html">Início</a>
+        <a href="sobre.html">Sobre</a>
+        <a href="produtos.html">Produtos</a>
+        <a href="parceiros.html">Parceiros</a>
+        <a href="portfolio.html">Portfolio</a>
         <a href="servicos.html">Serviços</a>
-
-        <hr>
-
     </nav>
 
-
     <main>
-
-
-        <!-- APRESENTAÇÃO -->
         <section>
-
-            <h3>
-                Bem-vindo ao WhatsApp Junior
-            </h3>
-
+            <h3>Bem-vindo ao WhatsApp Junior</h3>
             <p>
-                Aqui é a página inicial do WhatsApp Junior.
-                <br>
+                Aqui é a página inicial do WhatsApp Junior.<br>
                 Aqui você encontra tudo sobre o filho do WhatsApp.
             </p>
-
             <p>
-                O WhatsApp Junior é a versão mais leve e jovem do WhatsApp original.
-                <br>
+                O WhatsApp Junior é a versão mais leve e jovem do WhatsApp original.<br>
                 Ele foi criado para ser mais rápido e divertido.
             </p>
+        </section>
+
+        <!-- GALERIA AGORA É GRID, NÃO MAIS TABLE -->
+        <section>
+            <h3>Galeria Junior</h3>
+            <div class="grid">
+                <div class="card"><img src="https://images.unsplash.com/photo-1611746872915-64382b5c76da?q=80&w=300" alt=""><p>Leve e Rápido</p></div>
+                <div class="card"><img src="https://images.unsplash.com/photo-1611746872915-64382b5c76da?q=80&w=300" alt=""><p>100% Meme</p></div>
+                <div class="card"><img src="https://images.unsplash.com/photo-1611746872915-64382b5c76da?q=80&w=300" alt=""><p>Oficial Top</p></div>
+            </div>
+        </section>
+
+        <section>
+            <h2><a href="#" class="btn-zap">Quero Ajudar o Junior</a></h2>
+        </section>
+    </main>
+
+    <footer>
+        © 2026 WhatsApp Junior - O OFC MEME
+    </footer>
+</body>
+</html>
