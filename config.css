@@ -1,4 +1,4 @@
-/* WHATSAPP JUNIOR - CONFIG FINAL 100% RESPONSIVO */
+
 * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Arial, sans-serif; }
 body { background:#E5DDD5; color:#222; display:flex; flex-direction:column; min-height:100vh; }
 header { background:#075e54; color:white; padding:30px 10px; text-align:center; }
@@ -44,7 +44,64 @@ section h3 { color:#075e54; font-size:22px; margin-bottom:15px; }
 .missao ul { list-style:none; margin:15px 0; } .missao li { margin:8px 0; }
 
 .cta-img { width:100%; max-width:400px; border-radius:15px; }
+
+/* ASIDE - ALTO ELEGANTE */
+aside {
+  position: fixed;
+  left: 20px;
+  top: 0px; /* AGORA COMEÇA DE CIMA */
+  width: 280px;
+  height: 85vh; /* ALTURA GRANDE */
+  min-height: 500px; /* GARANTE QUE FICA GRANDE */
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  color: #075e54;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.18);
+  border-left: 5px solid #25d366;
+  text-align: left;
+  z-index: 100;
+  overflow-y: auto; /* SE FICAR MUITO TEXTO, CRIA ROLAGEM DENTRO */
+}
+
+aside h3 {
+  margin-bottom: 10px;
+  color: #075e54;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+aside p {
+  font-size: 14px;
+  line-height: 1.4;
+  opacity: .85;
+}
+
+/* EMPURRA O SITE PRA NÃO FICAR ATRÁS DO ASIDE */
+body {
+  padding-left: 300px;
+}
+
+/* NO CELULAR O ASIDE VIRA BARRA EMBAIXO */
+@media (max-width: 1100px) {
+  body { padding-left: 0; }
+  aside {
+    position: relative;
+    left: auto;
+    top: auto;
+    transform: none;
+    width: 92%;
+    max-width: 1000px;
+    margin: 20px auto;
+    text-align: center;
+  }
+}
+
 footer { background:#075e54; color:white; padding:20px; text-align:center; margin-top:auto; }
+
 
 @media (max-width:700px) {
   header h1 { font-size:22px; } main { width:95%; } section { padding:18px; }
