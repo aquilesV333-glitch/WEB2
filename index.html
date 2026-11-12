@@ -23,12 +23,56 @@
     </nav>
 <nav> ... </nav>
 
-<aside>
-  <h3>Curiosidade Junior</h3>
-  <p>Você sabia que o WhatsApp Junior é 3x mais leve que o original e gasta 90% menos internet?</p>
-  <br>
-  <p><strong>Versão:</strong> Junior 2.0 Meme Edition</p>
+  <aside style="position: fixed; left: 20px; top: 0px; width: 280px; height: 85vh; background: #fff; border-radius: 16px; padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); border: 5px solid #DCF8C6; z-index: 100; overflow: visible;">
+  <h3 style="color:#075e54; text-align:center; margin:0;">Junior Fixo</h3>
+  <p style="font-size:11px; text-align:center; margin:5px 0 10px 0; opacity:.7;">3x mais leve e 90% menos internet.</p>
+
+  <div style="position:relative; width:220px; height:380px; margin:0 auto;">
+    
+    <div onclick="this.style.display='none'" style="position:absolute; top:0; left:0; z-index:7; width:120px; height:150px; background:#fff; border:2px solid #075e54; border-radius:10px; display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 3px 8px rgba(0,0,0,.2);">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="50"><small>Logo</small>
+    </div>
+    <div onclick="this.style.display='none'" style="position:absolute; top:25px; left:20px; z-index:6; width:120px; height:150px; background:#fff; border:2px solid #075e54; border-radius:10px; display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 3px 8px rgba(0,0,0,.2);">
+      <img  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-5JJQAU1M5VZsgqfT6mnrYV-AT496JxQJ2eYDGrairg&s=10" width="60" style="border-radius:8px;"><small>Top</small>
+    </div>
+    <div onclick="this.style.display='none'" style="position:absolute; top:50px; left:40px; z-index:5; width:120px; height:150px; background:#fff; border:2px solid #075e54; border-radius:10px; display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 3px 8px rgba(0,0,0,.2);">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYlUgdnlz95uOHFuVpLlmsyFf64bGNX4LX8cx2VGv2NA&s=10" width="60" style="border-radius:8px;"><small>Meme</small>
+    </div>
+    <div onclick="this.style.display='none'" style="position:absolute; top:75px; left:60px; z-index:4; width:120px; height:150px; background:#fff; border:2px solid #075e54; border-radius:10px; display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 3px 8px rgba(0,0,0,.2);">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqYJlbTS-PV9qrqYg-gzS4-4NYooMGHZqS_US0mi1_YQ&s=10" width="55" style="border-radius:50%;"><small>Ferramenta Principal</small>
+    </div>
+    <div onclick="this.style.display='none'" style="position:absolute; top:100px; left:80px; z-index:3; width:120px; height:150px; background:#fff; border:2px solid #075e54; border-radius:10px; display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 3px 8px rgba(0,0,0,.2);">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6iCAPZicZrNGRrep4LBCbmg1HlXnpAxUqJD6FasOyrg&s=10" width="60" style="border-radius:8px;"><small>Equipe</small>
+    </div>
+    <div onclick="this.style.display='none'" style="position:absolute; top:125px; left:100px; z-index:2; width:120px; height:150px; background:#fff; border:2px solid #075e54; border-radius:10px; display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 3px 8px rgba(0,0,0,.2);">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxrNgaOy2-gFjAbXn5ShySA0ybQtqb4CEQOTnpiYx30g&s=10" width="60" style="border-radius:50%;"><small>dono do site</small>
+    </div>
+
+    <!-- BOTÃO QUE SÓ APARECE NO FINAL -->
+    <div id="btnReset" onclick="document.querySelectorAll('aside div div').forEach((c,i)=>{if(i<6)c.style.display='flex'})" style="display:none; position:absolute; top:185px; left:10px; z-index:1; width:200px; height:55px; background:#DCF8C6; border:2px solid #075e54; border-radius:10px; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 3px 8px rgba(0,0,0,.2); animation: pulse 1s infinite;">
+      <b style="color:#075e54; font-size:13px;">✨ MOSTRAR TUDO</b><small>você chegou no final!</small>
+    </div>
+  </div>
+
+  <p style="margin-top:20px; font-size:11px; text-align:center;"><strong>Versão:</strong> Junior 2.0 Meme Edition</p>
 </aside>
+
+<script>
+// SÓ MOSTRA O BOTÃO QUANDO CHEGAR NO FINAL DA PÁGINA
+window.addEventListener('scroll', function() {
+  let btn = document.getElementById('btnReset');
+  // se rolou até 90% da página
+  if (window.scrollY + window.innerHeight >= document.body.scrollHeight - 100) {
+    btn.style.display = 'flex';
+  } else {
+    btn.style.display = 'none';
+  }
+});
+</script>
+
+<style>
+@keyframes pulse { 0%{transform:scale(1)} 50%{transform:scale(1.05)} 100%{transform:scale(1)} }
+</style>
 
 <main> ... </main>
     <main>
